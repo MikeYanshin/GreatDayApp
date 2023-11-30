@@ -1,15 +1,8 @@
 <template>
-  <div>
-    <!-- Хэдер с днем и иконкой для открытия бокового меню -->
-    <header>
-      <span>{{ currentDay }}</span>
-      <button @click="toggleSideMenu">Открыть меню</button>
-    </header>
-
-    <!-- Основной контент с разметкой по часам и скроллом -->
+  <div class="calendar-container">
+    <!-- Основной контент с разметкой по часам -->
     <main>
       <div class="timeline">
-        <!-- Здесь добавлена более полная разметка по часам -->
         <div class="hour-label" v-for="hour in hours" :key="hour">
           {{ hour }}
         </div>
@@ -19,7 +12,12 @@
       <div class="events">
         <!-- Здесь можно добавить компоненты для отображения событий в течение дня -->
         <!-- Например, можно использовать v-for для перебора событий -->
-        <div v-for="event in events" :key="event.id" class="event">
+        <div
+          v-for="event in events"
+          :key="event.id"
+          class="event"
+          :style="eventStyle(event)"
+        >
           {{ event.title }}
         </div>
       </div>
@@ -28,10 +26,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from "vue";
+type Event = {
+  id: number;
+  title: string;
+  startTime: string;
+  endTime: string;
+};
 
-// Модель данных для дня и событий
-const currentDay = ref("2023-11-16");
+import { ref, reactive, computed } from "vue";
+
 const hours = ref(
   Array.from({ length: 24 }, (_, i) => `${i.toString().padStart(2, "0")}:00`)
 );
@@ -41,33 +44,26 @@ const events = reactive([
   /* ... */
 ]);
 
-// Функция для открытия/закрытия бокового меню
-const toggleSideMenu = () => {
-  // Реализуйте свою логику открытия/закрытия бокового меню
-};
+// Вычисляемое свойство для стиля событий
+const eventStyle = (event: Event) => {
+  const startHour = parseInt(event.startTime.split(":")[0]);
+  const endHour = parseInt(event.endTime.split(":")[0]);
+  const height = (endHour - startHour) * 60; // Высота события в минутах
+  const top = startHour * 60; // Верхняя позиция события в минутах
 
-// Дополнительные действия при монтировании компонента
-onMounted(() => {
-  // Реализуйте свою логику, если необходимо
-});
+  return {
+    height: `${height}px`,
+    top: `${top}px`,
+  };
+};
 </script>
 
 <style scoped>
-/* Стили для хэдера */
-header {
-  display: flex;
-  justify-content: space-between;
-  padding: 16px;
-  background-color: #4285f4; /* Цвет хэдера в примере Google Календаря */
-  color: white;
-}
-
-/* Стили для основного контента */
 main {
   display: flex;
+  margin-top: 60px; /* Учитываем высоту хэдера */
 }
 
-/* Стили для разметки по часам */
 .timeline {
   flex: 0 0 80px; /* Фиксированная ширина разметки по часам */
   border-right: 1px solid #ccc; /* Граница между разметкой и событиями */
@@ -85,16 +81,17 @@ main {
   text-align: center;
 }
 
-/* Стили для событий в течение дня */
 .events {
   flex: 1; /* Занимает оставшееся пространство */
   overflow-y: auto; /* Включаем скролл, если событий больше, чем помещается на экране */
+  position: relative; /* Необходимо для позиционирования событий */
 }
 
 .event {
+  position: absolute;
+  left: 80px; /* Учитываем ширину разметки по часам */
+  width: calc(100% - 80px); /* Учитываем ширину разметки по часам */
   padding: 8px;
   border-bottom: 1px solid #ccc; /* Граница между событиями */
 }
-
-/* Дополнительные стили по необходимости */
 </style>

@@ -1,7 +1,13 @@
 <template>
+  <app-header />
   <router-view />
+  <side-menu />
 </template>
 
+<script lang="ts" setup>
+import AppHeader from "./views/AppHeader.vue";
+import SideMenu from "./components/SideMenu.vue";
+</script>
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
