@@ -1,17 +1,13 @@
 <template>
-  <transition name="slide">
-    <div v-if="isMenuOpen" class="side-menu">
-      <router-link to="/">Home</router-link>
-      <router-link to="/about">About</router-link>
-      <router-link to="/contact">Contact</router-link>
-    </div>
-  </transition>
+  <div class="side-menu">
+    <button @click="sideMenuStore.toggleSideMenu()">закрыть</button>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { useSideMenuStore } from "@/store";
 
-const isMenuOpen = ref(false);
+const sideMenuStore = useSideMenuStore();
 </script>
 
 <style scoped>
@@ -21,20 +17,10 @@ const isMenuOpen = ref(false);
   top: 0;
   left: 0;
   height: 100vh;
-  width: 200px;
-  background-color: #333;
+  width: 100px;
+  background-color: #f9f9f9;
   color: #fff;
   padding: 20px;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
-}
-
-.slide-enter-active,
-.slide-leave-active {
-  transition: transform 0.5s;
-}
-
-.slide-enter,
-.slide-leave-to {
-  transform: translateX(-100%);
 }
 </style>

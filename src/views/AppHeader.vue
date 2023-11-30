@@ -4,10 +4,25 @@
     <span>{{ currentDay }}</span>
     <span>М. Яньшин</span>
   </header>
+
+  <transition name="slide">
+    <side-menu v-if="isMenuOpen" />
+  </transition>
 </template>
 
 <script lang="ts" setup>
+import SideMenu from "@/components/SideMenu.vue";
 import { computed } from "vue";
+
+import { useSideMenuStore } from "@/store";
+
+const sideMenuStore = useSideMenuStore();
+
+const isMenuOpen = computed(() => {
+  console.log(sideMenuStore.isOpen);
+
+  return sideMenuStore.isOpen;
+});
 
 const currentDay = computed(() => {
   const date = new Date();
@@ -17,7 +32,7 @@ const currentDay = computed(() => {
 
 // Функция для открытия/закрытия бокового меню
 const toggleSideMenu = () => {
-  // Реализуйте свою логику открытия/закрытия бокового меню
+  sideMenuStore.toggleSideMenu();
 };
 </script>
 
@@ -31,5 +46,15 @@ header {
   padding: 16px;
   background-color: #4285f4;
   color: white;
+}
+
+.slide-enter-active,
+.slide-leave-active {
+  transition: transform 0.5s;
+}
+
+.slide-enter,
+.slide-leave-to {
+  transform: translateX(-100%);
 }
 </style>
