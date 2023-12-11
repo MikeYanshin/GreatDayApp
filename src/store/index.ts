@@ -21,9 +21,41 @@ export const useSideMenuStore = defineStore("side-menu", {
   },
   actions: {
     toggleSideMenu() {
-      console.log("toggle");
-
       this.isOpen = !this.isOpen;
+    },
+  },
+});
+
+export const useNotifyStore = defineStore("noti", {
+  state: () => ({
+    shown: false,
+    header: "",
+    description: "",
+    type: "info",
+  }),
+  getters: {
+    isNotiShown: (state) => state.shown,
+  },
+  actions: {
+    showNotify({
+      header,
+      description,
+      type,
+    }: {
+      header: string;
+      description?: string;
+      type: string;
+    }) {
+      this.header = header;
+      this.description = description || "";
+      this.type = type;
+      this.shown = true;
+      setTimeout(() => {
+        this.shown = false;
+      }, 1500);
+    },
+    closeNoti() {
+      this.shown = false;
     },
   },
 });

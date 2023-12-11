@@ -19,8 +19,6 @@ import { useSideMenuStore } from "@/store";
 const sideMenuStore = useSideMenuStore();
 
 const isMenuOpen = computed(() => {
-  console.log(sideMenuStore.isOpen);
-
   return sideMenuStore.isOpen;
 });
 

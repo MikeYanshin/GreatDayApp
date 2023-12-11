@@ -1,11 +1,17 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import CalendarView from "../views/CalendarView.vue";
+import LoginView from "@/views/LoginView.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
     name: "home",
     component: CalendarView,
+  },
+  {
+    path: "/auth",
+    name: "auth",
+    component: LoginView,
   },
   {
     path: "/about",
