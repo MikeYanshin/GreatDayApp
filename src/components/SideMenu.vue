@@ -22,5 +22,6 @@ const sideMenuStore = useSideMenuStore();
   color: #fff;
   padding: 20px;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+  z-index: 5;
 }
 </style>

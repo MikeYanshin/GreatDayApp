@@ -25,7 +25,7 @@ const isMenuOpen = computed(() => {
 const currentDay = computed(() => {
   const date = new Date();
   const day = date.toLocaleDateString("ru-RU", { weekday: "long" });
-  return day[0].toUpperCase() + day.substring(1);
+  return date.getDate() + " " + day[0].toUpperCase() + day.substring(1);
 });
 
 // Функция для открытия/закрытия бокового меню
@@ -36,14 +36,15 @@ const toggleSideMenu = () => {
 
 <style>
 header {
-  position: fixed;
-  top: 0;
-  left: 0;
   display: flex;
   justify-content: space-between;
   padding: 16px;
   background-color: #4285f4;
   color: white;
+  position: fixed;
+  top: 0px;
+  width: -webkit-fill-available;
+  z-index: 3;
 }
 
 .slide-enter-active,

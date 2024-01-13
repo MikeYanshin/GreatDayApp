@@ -34,7 +34,7 @@
     "src/**/*.vue",
     "tests/**/*.ts",
     "tests/**/*.tsx"
-  ],
+, "src/js/helpers/diffMinutes.js", "src/js/helpers/timeSorting.js"  ],
   "exclude": [
     "node_modules"
   ]

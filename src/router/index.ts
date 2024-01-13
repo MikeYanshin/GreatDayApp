@@ -22,6 +22,22 @@ const routes: Array<RouteRecordRaw> = [
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
   },
+  {
+    path: "/create-tast/:type",
+    name: "create-task",
+    meta: { transition: "slide-left" }, // TODO Добавить анимацию роута
+    component: () => import("../views/AddTaskView.vue"),
+    children: [
+      // {
+      //   path: ":id",
+      //   name: "new-employees:lpage",
+      //   component: () => import("@pages/employees/page/EmployeesPage.vue"),
+      //   meta: {
+      //     checkAccess: () => read(Rules.General.Employees),
+      //   },
+      // },
+    ],
+  },
 ];
 
 const router = createRouter({
