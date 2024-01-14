@@ -32,17 +32,12 @@
 type Event = {
   id: number;
   title: string;
-  startTime: string;
-  endTime: string;
+  startTime: Date;
+  dur: number;
 };
 
-import { ref, reactive, computed, onMounted } from "vue";
+import { reactive, computed } from "vue";
 import CalendarEvent from "../components/CalendarEvent.vue";
-import AppHeader from "../components/AppHeader.vue";
-import { diffMinutes } from "../js/helpers/diffMinutes";
-import { isBefore, isAfter, isSame } from "../js/helpers/timeSorting";
-
-const active = ref(false);
 const day = new Date();
 const now = new Date();
 const minutes = now.getMinutes() + now.getHours() * 60;
@@ -97,7 +92,7 @@ const events = reactive([
 //   };
 // };
 
-const eventScrollTop = (event) => {
+const eventScrollTop = (event: Event) => {
   const eventTime =
     event.startTime instanceof Date
       ? event.startTime

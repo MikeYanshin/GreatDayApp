@@ -37,7 +37,6 @@ import { useRouter, useRoute } from "vue-router";
 const router = useRouter();
 const route = useRoute();
 
-const isAuthPage = computed(() => location.pathname == "/auth");
 const onHomePage = computed(() => route.name === "home");
 const addTaskListVisable = ref(false);
 const addTask = (type: string, event: Event) => {
