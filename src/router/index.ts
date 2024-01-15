@@ -27,16 +27,11 @@ const routes: Array<RouteRecordRaw> = [
     name: "create-task",
     meta: { transition: "slide-left" }, // TODO Добавить анимацию роута
     component: () => import("../views/AddTaskView.vue"),
-    children: [
-      // {
-      //   path: ":id",
-      //   name: "new-employees:lpage",
-      //   component: () => import("@pages/employees/page/EmployeesPage.vue"),
-      //   meta: {
-      //     checkAccess: () => read(Rules.General.Employees),
-      //   },
-      // },
-    ],
+  },
+  {
+    path: "/reminders",
+    name: "reminders",
+    component: () => import("../views/RemindersView.vue"),
   },
 ];
 
@@ -46,3 +41,14 @@ const router = createRouter({
 });
 
 export default router;
+
+// children: [
+// {
+//   path: ":id",
+//   name: "new-employees:lpage",
+//   component: () => import("@pages/employees/page/EmployeesPage.vue"),
+//   meta: {
+//     checkAccess: () => read(Rules.General.Employees),
+//   },
+// },
+// ],

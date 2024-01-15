@@ -3,19 +3,19 @@
     <transition name="noti-anim">
       <g-d-notify v-if="shown" />
     </transition>
-    <app-header v-if="onHomePage" />
+    <app-header v-if="onHomePage || onRemindersPage" />
     <router-view />
     <button
       v-if="onHomePage"
       class="add-task-button"
-      @click="addTaskListVisable = !addTaskListVisable"
+      @click="addTaskListVisible = !addTaskListVisible"
     >
       Добавить
     </button>
     <div
-      v-if="addTaskListVisable"
+      v-if="addTaskListVisible"
       class="add-task-list"
-      @click="addTaskListVisable = !addTaskListVisable"
+      @click="addTaskListVisible = !addTaskListVisible"
     >
       <div class="list">
         <span @click="addTask('event', $event)">Событие</span>
@@ -38,11 +38,12 @@ const router = useRouter();
 const route = useRoute();
 
 const onHomePage = computed(() => route.name === "home");
-const addTaskListVisable = ref(false);
+const onRemindersPage = computed(() => route.name === "reminders");
+const addTaskListVisible = ref(false);
 const addTask = (type: string, event: Event) => {
   event.stopPropagation();
   router.push(`/create-tast/${type}`);
-  addTaskListVisable.value = !addTaskListVisable.value;
+  addTaskListVisible.value = !addTaskListVisible.value;
 };
 </script>
 <style>
