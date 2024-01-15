@@ -1,6 +1,8 @@
 <template>
   <header>
-    <button @click="toggleSideMenu">Открыть меню</button>
+    <el-icon size="small" color="white" @click="toggleSideMenu">
+      <Expand />
+    </el-icon>
     <span>{{ currentDay }}</span>
     <span>М. Яньшин</span>
   </header>
@@ -11,6 +13,7 @@
 </template>
 
 <script lang="ts" setup>
+import { Expand, Plus } from "@element-plus/icons-vue";
 import SideMenu from "@/components/SideMenu.vue";
 import { computed } from "vue";
 
@@ -42,9 +45,10 @@ header {
   background-color: #4285f4;
   color: white;
   position: fixed;
-  top: 0px;
+  top: 0;
   width: -webkit-fill-available;
   z-index: 3;
+  align-items: center;
 }
 
 .slide-enter-active,
@@ -55,5 +59,9 @@ header {
 .slide-enter,
 .slide-leave-to {
   transform: translateX(-100%);
+}
+
+.expand-button {
+  color: white;
 }
 </style>

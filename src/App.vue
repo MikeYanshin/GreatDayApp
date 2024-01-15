@@ -5,13 +5,17 @@
     </transition>
     <app-header v-if="onHomePage || onRemindersPage" />
     <router-view />
-    <button
+    <el-button
       v-if="onHomePage"
-      class="add-task-button"
       @click="addTaskListVisible = !addTaskListVisible"
+      class="add-task-button"
+      circle
+      plain
     >
-      Добавить
-    </button>
+      <el-icon size="24" color="black">
+        <Plus />
+      </el-icon>
+    </el-button>
     <div
       v-if="addTaskListVisible"
       class="add-task-list"
@@ -34,6 +38,7 @@ import { storeToRefs } from "pinia";
 const notiStore = useNotifyStore();
 const { shown } = storeToRefs(notiStore);
 import { useRouter, useRoute } from "vue-router";
+import { Plus } from "@element-plus/icons-vue";
 const router = useRouter();
 const route = useRoute();
 
@@ -84,8 +89,9 @@ body {
 
 .add-task-button {
   position: fixed;
-  top: 850px;
-  right: 16px;
+  top: 810px;
+  right: 20px;
+  padding: 24px !important;
 }
 
 .add-task-list {
