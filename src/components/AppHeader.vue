@@ -33,7 +33,7 @@ const currentDay = computed(() => {
 
 // Функция для открытия/закрытия бокового меню
 const toggleSideMenu = () => {
-  sideMenuStore.toggleSideMenu();
+  sideMenuStore.openSideMenu();
 };
 </script>
 

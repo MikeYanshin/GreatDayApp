@@ -7,6 +7,7 @@
     ></div> -->
     <div class="event_time">{{ time }}</div>
     <div class="event_name">{{ data.title }}</div>
+    <div class="duration">{{ formattedDuration }}</div>
   </div>
 </template>
 
@@ -33,6 +34,19 @@ const time = computed(() => {
   return `${formattedHours}:${formattedMinutes}`;
 });
 
+const formattedDuration = computed(() => {
+  const hours = Math.floor(props.data.dur / 60);
+  const minutes = props.data.dur % 60;
+
+  if (hours === 0) {
+    return `${minutes}мин`;
+  } else if (minutes === 0) {
+    return `${hours}ч`;
+  } else {
+    return `${hours}ч ${minutes}мин`;
+  }
+});
+
 const eventHeight = (dur: number) => {
   return dur - 1;
 };
@@ -44,5 +58,11 @@ const eventHeight = (dur: number) => {
   gap: 6px;
   padding-left: 8px;
   min-height: 20px;
+}
+
+.duration {
+  position: absolute;
+  right: 5px;
+  color: #fff;
 }
 </style>

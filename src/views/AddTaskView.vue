@@ -1,9 +1,12 @@
 <template>
   <div class="add-task-page">
     <div class="task-actions">
-      <button @click="router.back()">Отменить</button>
+      <el-button text bg @click="router.back()">Отменить</el-button>
       <div>Добавить {{ pageHeader }}</div>
-      <button
+      <el-button
+        text
+        bg
+        type="primary"
         @click="
           () => {
             console.log(taskData);
@@ -11,54 +14,83 @@
         "
       >
         Сохранить
-      </button>
+      </el-button>
     </div>
-    <GDInput
-      v-model="taskData.title"
-      placeholder="Введите название"
-      accentColor="black"
+    <label>
+      <span class="label-title">Название</span>
+      <el-input
+        v-model="taskData.title"
+        placeholder="Введите название"
+      ></el-input>
+    </label>
+    <label>
+      <span class="label-title">Весь день</span>
+      <el-switch
+        class="add-task-item"
+        v-model="allDayLong"
+        size="large"
+        style="--el-switch-on-color: #c7c7c7; --el-switch-off-color: #c7c7c7"
+        active-text="Нет"
+        inactive-text="Да"
+      />
+    </label>
+    <label>
+      <span class="label-title">Дата начала</span>
+      <el-config-provider :locale="ru">
+        <el-date-picker
+          class="add-task-item"
+          v-model="taskData.startTime"
+          type="datetime"
+          placeholder="Дата начала"
+        />
+      </el-config-provider>
+    </label>
+    <label v-if="taskTypeEvent">
+      <span class="label-title">Дата конец</span>
+      <el-config-provider :locale="ru">
+        <el-date-picker
+          class="add-task-item"
+          v-model="taskData.endTime"
+          type="datetime"
+          placeholder="Дата конец"
+        />
+      </el-config-provider>
+    </label>
+    <label>
+      <span class="label-title">Описание</span>
+      <el-input
+        v-model="taskData.description"
+        :rows="2"
+        type="textarea"
+        placeholder="Добавить описание"
+      />
+    </label>
+    <label class="inline">
+      <span class="label-title">Выбрать цвет</span>
+      <el-config-provider :locale="ru">
+        <el-color-picker size="small" v-model="taskData.color" />
+      </el-config-provider>
+    </label>
+    <label>
+      <span class="label-title">Добавить тэги</span>
+      <GDTags v-model="taskData.tags" />
+    </label>
+
+    <el-rate
+      v-if="taskTypeRemind"
+      v-model="remindDifficult"
+      clearable
+      :colors="['#67C23A', '#E6A23C', '#F56C6C']"
     />
-    <!-- <div class="all-day" v-if="taskTypeEvent">
-      <input type="checkbox" id="allDay" name="allDay" />
-      <label for="allDay">Весь день</label>
-    </div> -->
-    <input
-      class="date-picker"
-      type="datetime-local"
-      id="startTime"
-      name="startTime"
-      @change="submitChange('startTime', $event)"
-    />
-    <input
-      class="date-picker"
-      v-if="taskTypeEvent"
-      type="datetime-local"
-      id="endTime"
-      name="endTime"
-      @change="submitChange('endTime', $event)"
-    />
-    <GDInput
-      v-model="taskData.description"
-      placeholder="Добавить описание"
-      accentColor="black"
-    />
-    <GDInput
-      v-if="taskTypeEvent"
-      v-model="taskData.color"
-      placeholder="Изменить цвет"
-      accentColor="black"
-    />
-    <!-- Тэги -->
-    <GDTagsInput v-model="taskData.tags" />
   </div>
 </template>
 
 <script lang="ts" setup>
+import ru from "element-plus/dist/locale/ru.min";
 import { computed, onMounted, ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import GDInput from "@/components/GDInput.vue";
-import GDButton from "@/components/GDButton.vue";
-import GDTagsInput from "@/components/GDTagsInput.vue";
+
+import GDTags from "@/components/GDTags.vue";
 const router = useRouter();
 const route = useRoute();
 
@@ -67,9 +99,11 @@ const taskData = ref({
   startTime: "",
   endTime: "",
   description: "",
-  color: "",
+  color: "#ccc",
   tags: [],
 });
+const remindDifficult = ref(0);
+const allDayLong = ref(false);
 
 // onMounted(() => {});
 
@@ -78,24 +112,27 @@ const taskTypeEvent = computed(() => taskType.value === "event");
 const taskTypeRemind = computed(() => taskType.value === "remind");
 const submitChange = (type, event) => {
   taskData.value[type] = new Date(event.target.value);
-  console.log(taskData.value);
 };
 const pageHeader = computed(() =>
   taskTypeEvent.value ? "событие" : "напоминание"
 );
 </script>
 
-<style>
+<style scoped>
 .add-task-page {
   display: flex;
   flex-direction: column;
   padding: 8px;
+  color: black;
 }
 
 .task-actions {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 24px;
+  margin-bottom: 14px;
+  align-items: baseline;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #c9c9c9;
 }
 
 .date-picker {
@@ -111,5 +148,19 @@ const pageHeader = computed(() =>
   /* --placeholder-color: white; */
   width: -webkit-fill-available;
   border-radius: 8px;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  color: black;
+  margin-bottom: 16px;
+  font-size: larger;
+}
+
+.inline {
+  flex-direction: row;
 }
 </style>

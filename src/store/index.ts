@@ -23,6 +23,12 @@ export const useSideMenuStore = defineStore("side-menu", {
     toggleSideMenu() {
       this.isOpen = !this.isOpen;
     },
+    closeSideMenu() {
+      this.isOpen = false;
+    },
+    openSideMenu() {
+      this.isOpen = true;
+    },
   },
 });
 

@@ -3,7 +3,7 @@
     <transition name="noti-anim">
       <g-d-notify v-if="shown" />
     </transition>
-    <app-header v-if="onHomePage || onRemindersPage" />
+    <app-header v-if="onHomePage || onRemindersPage || onSettingsPage" />
     <router-view />
     <el-button
       v-if="onHomePage"
@@ -44,6 +44,7 @@ const route = useRoute();
 
 const onHomePage = computed(() => route.name === "home");
 const onRemindersPage = computed(() => route.name === "reminders");
+const onSettingsPage = computed(() => route.name === "settings");
 const addTaskListVisible = ref(false);
 const addTask = (type: string, event: Event) => {
   event.stopPropagation();
@@ -53,7 +54,7 @@ const addTask = (type: string, event: Event) => {
 </script>
 <style>
 #app {
-  font-family: Poppins, Helvetica, Arial, sans-serif;
+  font-family: Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;

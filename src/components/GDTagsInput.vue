@@ -29,7 +29,6 @@
         class="custom-input"
         :class="{ 'custom-input-hidden': tagInputDisabled() }"
         :value="currentTag"
-        placeholder="Добавить тэги"
         :disabled="tagInputDisabled()"
         @input="processTags($event.target.value)"
         @keydown.tab.prevent="processTagsOnKeyUpEvent($event.target.value)"

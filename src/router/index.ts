@@ -33,6 +33,11 @@ const routes: Array<RouteRecordRaw> = [
     name: "reminders",
     component: () => import("../views/RemindersView.vue"),
   },
+  {
+    path: "/settings",
+    name: "settings",
+    component: () => import("../views/SettingsView.vue"),
+  },
 ];
 
 const router = createRouter({
