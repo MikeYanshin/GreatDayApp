@@ -12,20 +12,47 @@
       circle
       plain
     >
-      <el-icon size="24" color="black">
+      <el-icon size="24" color="white">
         <Plus />
       </el-icon>
     </el-button>
-    <div
-      v-if="addTaskListVisible"
-      class="add-task-list"
-      @click="addTaskListVisible = !addTaskListVisible"
-    >
-      <div class="list">
-        <span @click="addTask('event', $event)">Событие</span>
-        <span @click="addTask('remind', $event)">Напоминание</span>
+    <Transition>
+      <div
+        v-if="addTaskListVisible"
+        class="add-task-list"
+        @click="addTaskListVisible = !addTaskListVisible"
+      >
+        <div class="add-task-buttons">
+          <div class="event-button-text">
+            Напоминание
+            <el-button
+              circle
+              plain
+              class="remind-button"
+              @click="addTask('remind', $event)"
+            >
+              <el-icon size="24" color="#409EFF">
+                <Bell />
+              </el-icon>
+            </el-button>
+          </div>
+          <div class="event-button-text">
+            Событие
+            <el-button
+              circle
+              plain
+              dark
+              class="event-button"
+              @click="addTask('event', $event)"
+            >
+              <el-icon size="24" color="black">
+                <Calendar />
+              </el-icon>
+            </el-button>
+          </div>
+        </div>
       </div>
-    </div>
+    </Transition>
   </div>
 </template>
 
@@ -38,7 +65,7 @@ import { storeToRefs } from "pinia";
 const notiStore = useNotifyStore();
 const { shown } = storeToRefs(notiStore);
 import { useRouter, useRoute } from "vue-router";
-import { Plus } from "@element-plus/icons-vue";
+import { Plus, Calendar, Bell } from "@element-plus/icons-vue";
 const router = useRouter();
 const route = useRoute();
 
@@ -48,7 +75,7 @@ const onSettingsPage = computed(() => route.name === "settings");
 const addTaskListVisible = ref(false);
 const addTask = (type: string, event: Event) => {
   event.stopPropagation();
-  router.push(`/create-tast/${type}`);
+  router.push(`/create-task/${type}`);
   addTaskListVisible.value = !addTaskListVisible.value;
 };
 </script>
@@ -88,11 +115,23 @@ body {
   transform: translateY(-100%);
 }
 
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
+
 .add-task-button {
   position: fixed;
   top: 810px;
   right: 20px;
   padding: 24px !important;
+  background-color: #409eff !important;
+  border: none !important;
 }
 
 .add-task-list {
@@ -105,18 +144,37 @@ body {
   z-index: 6;
 }
 
-.list {
+.add-task-buttons {
   display: flex;
   flex-direction: column;
   padding: 10px 14px;
-  gap: 4px;
+  gap: 8px;
   border-radius: 6px;
-  background-color: antiquewhite;
-  width: fit-content;
   position: fixed;
-  top: 810px;
-  right: 16px;
+  top: 748px;
+  right: -2px;
   text-align: end;
   z-index: 7;
+}
+
+.event-button {
+  background-color: #409eff !important;
+  padding: 24px !important;
+  border: none !important;
+  margin-left: 8px;
+}
+
+.remind-button {
+  background-color: #484848 !important;
+  padding: 22px !important;
+  border: none !important;
+  margin-left: 8px;
+  margin-right: 4px;
+}
+
+.event-button-text {
+  color: white;
+  margin-right: 8px;
+  font-size: large;
 }
 </style>

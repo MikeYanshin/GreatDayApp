@@ -23,7 +23,7 @@ const routes: Array<RouteRecordRaw> = [
       import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
   },
   {
-    path: "/create-tast/:type",
+    path: "/create-task/:type",
     name: "create-task",
     meta: { transition: "slide-left" }, // TODO Добавить анимацию роута
     component: () => import("../views/AddTaskView.vue"),
@@ -32,6 +32,12 @@ const routes: Array<RouteRecordRaw> = [
     path: "/reminders",
     name: "reminders",
     component: () => import("../views/RemindersView.vue"),
+  },
+  {
+    path: "/reminders/:type",
+    name: "remind-list",
+    meta: { transition: "slide-left" },
+    component: () => import("../views/RemindersListView.vue"),
   },
   {
     path: "/settings",

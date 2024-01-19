@@ -23,33 +23,34 @@
         placeholder="Введите название"
       ></el-input>
     </label>
-    <label>
-      <span class="label-title">Весь день</span>
-      <el-switch
-        class="add-task-item"
-        v-model="allDayLong"
-        size="large"
-        style="--el-switch-on-color: #c7c7c7; --el-switch-off-color: #c7c7c7"
-        active-text="Нет"
-        inactive-text="Да"
-      />
-    </label>
-    <label>
-      <span class="label-title">Дата начала</span>
+    <!--    <label class="inline">-->
+    <!--      <span class="label-title">Весь день</span>-->
+    <!--      <el-switch-->
+    <!--        v-model="allDayLong"-->
+    <!--        size="large"-->
+    <!--        style="&#45;&#45;el-switch-on-color: #c7c7c7; &#45;&#45;el-switch-off-color: #c7c7c7"-->
+    <!--        active-text="Нет"-->
+    <!--        inactive-text="Да"-->
+    <!--      />-->
+    <!--    </label>-->
+    <label class="">
+      <span class="label-title">Начало</span>
       <el-config-provider :locale="ru">
         <el-date-picker
-          class="add-task-item"
+          style="width: -webkit-fill-available !important"
+          class="date-picker"
           v-model="taskData.startTime"
           type="datetime"
           placeholder="Дата начала"
         />
       </el-config-provider>
     </label>
-    <label v-if="taskTypeEvent">
-      <span class="label-title">Дата конец</span>
+    <label v-if="taskTypeEvent" class="">
+      <span class="label-title">Конец</span>
       <el-config-provider :locale="ru">
         <el-date-picker
-          class="add-task-item"
+          style="width: -webkit-fill-available !important"
+          class="date-picker"
           v-model="taskData.endTime"
           type="datetime"
           placeholder="Дата конец"
@@ -65,29 +66,31 @@
         placeholder="Добавить описание"
       />
     </label>
-    <label class="inline">
+    <label class="inline" v-if="taskTypeEvent">
       <span class="label-title">Выбрать цвет</span>
       <el-config-provider :locale="ru">
         <el-color-picker size="small" v-model="taskData.color" />
       </el-config-provider>
     </label>
     <label>
-      <span class="label-title">Добавить тэги</span>
+      <span v-if="taskData.tags.length" class="label-title">Тэги</span>
       <GDTags v-model="taskData.tags" />
     </label>
 
-    <el-rate
-      v-if="taskTypeRemind"
-      v-model="remindDifficult"
-      clearable
-      :colors="['#67C23A', '#E6A23C', '#F56C6C']"
-    />
+    <!--    <label v-if="taskTypeRemind" class="inline">-->
+    <!--      <span class="label-title">Сложность</span>-->
+    <!--      <el-rate-->
+    <!--        v-model="taskData.remindDifficult"-->
+    <!--        clearable-->
+    <!--        :colors="['#67C23A', '#E6A23C', '#F56C6C']"-->
+    <!--      />-->
+    <!--    </label>-->
   </div>
 </template>
 
 <script lang="ts" setup>
 import ru from "element-plus/dist/locale/ru.min";
-import { computed, onMounted, ref } from "vue";
+import { computed, ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
 
 import GDTags from "@/components/GDTags.vue";
@@ -101,11 +104,9 @@ const taskData = ref({
   description: "",
   color: "#ccc",
   tags: [],
+  remindDifficult: null,
+  allDayLong: false,
 });
-const remindDifficult = ref(0);
-const allDayLong = ref(false);
-
-// onMounted(() => {});
 
 const taskType = computed(() => route.params.type);
 const taskTypeEvent = computed(() => taskType.value === "event");
@@ -144,9 +145,6 @@ const pageHeader = computed(() =>
   outline: none;
   background-color: #5d5c5c2b;
   height: 28px;
-  /* color: white; */
-  /* --placeholder-color: white; */
-  width: -webkit-fill-available;
   border-radius: 8px;
 }
 
@@ -162,5 +160,7 @@ label {
 
 .inline {
   flex-direction: row;
+  align-items: baseline;
+  gap: 24px;
 }
 </style>
