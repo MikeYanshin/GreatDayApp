@@ -6,21 +6,26 @@
       >
     </div>
     <div class="reminders-list-title">{{ listTitle }}</div>
-    <div class="reminders-list">
+
+    <el-collapse class="collapse padding" v-model="activeCollapse">
+      <el-collapse-item title="Правки диплома" name="1">
+        <div class="reminders-list padding">
+          <RemindItem
+            v-for="item in reminders"
+            :remind="item"
+            v-bind:key="item.id"
+            @select="handleSelection(item)"
+          />
+        </div>
+      </el-collapse-item>
+    </el-collapse>
+    <div class="reminders-list padding">
       <RemindItem
-        v-for="item in reminders"
+        v-for="item in freeReminders"
         :remind="item"
         v-bind:key="item.id"
         @select="handleSelection(item)"
       />
-      <!--      <el-radio-->
-      <!--        class="remind"-->
-      <!--        v-for="rem in reminders"-->
-      <!--        :label="rem.label"-->
-      <!--        v-bind:key="rem.id"-->
-      <!--        v-model="radio"-->
-      <!--        @change="changeRadio(rem)"-->
-      <!--      ></el-radio>-->
     </div>
   </div>
 </template>
@@ -37,22 +42,26 @@ const router = useRouter();
 import { useRoute, useRouter } from "vue-router";
 import { computed, ref } from "vue";
 import RemindItem from "@/components/RemindItem.vue";
+const activeCollapse = ref(["1"]);
 
 const route = useRoute();
 const reminders = ref([
   {
     id: "1",
     title: "Доделать диаграмму",
+    event: "Правки диплома",
   },
   {
     id: "2",
     title: "Вставить картинки",
     description: "Диаграммы",
     time: new Date("2024-01-22T10:00:00"),
+    event: "Правки диплома",
   },
   {
     id: "3",
     title: "Дополнить источники",
+    event: "Правки диплома",
   },
   {
     id: "4",
@@ -65,6 +74,16 @@ const reminders = ref([
     title: "Отправить правки",
     description: "на почту руководителю",
     time: new Date("2024-01-18T18:00:00"),
+  },
+]);
+const freeReminders = ref([
+  {
+    id: "6",
+    title: "Помыть машину",
+  },
+  {
+    id: "7",
+    title: "Сходить на почту",
   },
 ]);
 
@@ -97,10 +116,22 @@ const handleSelection = (e: IRemind) => {
 .reminders-list {
   display: flex;
   flex-direction: column;
-  padding-left: 16px;
+
+  :last-child {
+    border: none;
+  }
 }
 
 .remind {
   font-size: large;
+}
+
+.padding {
+  padding-left: 16px;
+}
+
+.collapse :deep(.el-collapse-item__header) {
+  font-weight: bold;
+  font-size: 16px;
 }
 </style>

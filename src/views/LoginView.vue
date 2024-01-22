@@ -2,14 +2,14 @@
   <form @submit.prevent="submitForm" class="login-form">
     <div class="header">Есть аккаунт?</div>
     <br />
-    <GDInput
+    <el-input
       v-model="email"
       placeholder="Email"
       :error="emailError"
       accentColor="white"
       inputType="email"
     />
-    <GDInput
+    <el-input
       v-model="password"
       placeholder="Пароль"
       accentColor="white"
@@ -19,11 +19,11 @@
       <template #icon>
         <img class="password-icon" :src="passwordIcon" />
       </template>
-    </GDInput>
+    </el-input>
 
-    <GDButton textColor="#3e3e3e">
+    <el-button textColor="#3e3e3e">
       {{ isLogined ? "Войти" : "Зарегистрироваться" }}
-    </GDButton>
+    </el-button>
     <div class="remember">
       <input type="checkbox" id="remember" name="remember" />
       <label for="remember">Запомнить меня</label>
@@ -34,8 +34,6 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
-import GDInput from "@/components/GDInput.vue";
-import GDButton from "@/components/GDButton.vue";
 import { isLogined } from "@/js/helpers/isLogined";
 import { useNotifyStore } from "@/store";
 

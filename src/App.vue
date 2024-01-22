@@ -1,8 +1,5 @@
 <template>
   <div>
-    <transition name="noti-anim">
-      <g-d-notify v-if="shown" />
-    </transition>
     <app-header v-if="onHomePage || onRemindersPage || onSettingsPage" />
     <router-view />
     <el-button
@@ -59,11 +56,6 @@
 <script lang="ts" setup>
 import { computed, ref } from "vue";
 import AppHeader from "../src/components/AppHeader.vue";
-import { useNotifyStore } from "@/store";
-import GDNotify from "@/components/GDNotify.vue";
-import { storeToRefs } from "pinia";
-const notiStore = useNotifyStore();
-const { shown } = storeToRefs(notiStore);
 import { useRouter, useRoute } from "vue-router";
 import { Plus, Calendar, Bell } from "@element-plus/icons-vue";
 const router = useRouter();
@@ -104,15 +96,6 @@ nav a.router-link-exact-active {
 
 body {
   margin: 0;
-}
-
-.noti-anim-enter-active,
-.noti-anim-leave-active {
-  transition: transform 0.5s;
-}
-.noti-anim-enter,
-.noti-anim-leave-to {
-  transform: translateY(-100%);
 }
 
 .v-enter-active,

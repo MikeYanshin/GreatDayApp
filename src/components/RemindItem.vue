@@ -70,6 +70,7 @@ const isPastTime = computed(() => props.remind.time < new Date());
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  justify-content: center;
 }
 
 .remind-container-title {

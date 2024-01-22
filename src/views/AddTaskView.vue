@@ -23,16 +23,6 @@
         placeholder="Введите название"
       ></el-input>
     </label>
-    <!--    <label class="inline">-->
-    <!--      <span class="label-title">Весь день</span>-->
-    <!--      <el-switch-->
-    <!--        v-model="allDayLong"-->
-    <!--        size="large"-->
-    <!--        style="&#45;&#45;el-switch-on-color: #c7c7c7; &#45;&#45;el-switch-off-color: #c7c7c7"-->
-    <!--        active-text="Нет"-->
-    <!--        inactive-text="Да"-->
-    <!--      />-->
-    <!--    </label>-->
     <label class="">
       <span class="label-title">Начало</span>
       <el-config-provider :locale="ru">
@@ -73,18 +63,27 @@
       </el-config-provider>
     </label>
     <label>
-      <span v-if="taskData.tags.length" class="label-title">Тэги</span>
-      <GDTags v-model="taskData.tags" />
+      <span class="label-title">Связанные напоминания</span>
+      <el-select
+        multiple
+        collapse-tags
+        collapse-tags-tooltip
+        :max-collapse-tags="1"
+        placeholder="Выбрать напоминания"
+        v-model="taskData.eventReminds"
+      >
+        <el-option
+          v-for="remind in reminders"
+          :key="remind.id"
+          :label="remind.title"
+          :value="remind.id"
+        />
+      </el-select>
     </label>
-
-    <!--    <label v-if="taskTypeRemind" class="inline">-->
-    <!--      <span class="label-title">Сложность</span>-->
-    <!--      <el-rate-->
-    <!--        v-model="taskData.remindDifficult"-->
-    <!--        clearable-->
-    <!--        :colors="['#67C23A', '#E6A23C', '#F56C6C']"-->
-    <!--      />-->
-    <!--    </label>-->
+    <label>
+      <span v-if="taskData.tags.length" class="label-title">Тэги</span>
+      <TagsInput v-model="taskData.tags" />
+    </label>
   </div>
 </template>
 
@@ -93,7 +92,7 @@ import ru from "element-plus/dist/locale/ru.min";
 import { computed, ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
 
-import GDTags from "@/components/GDTags.vue";
+import TagsInput from "@/components/TagsInput.vue";
 const router = useRouter();
 const route = useRoute();
 
@@ -106,7 +105,37 @@ const taskData = ref({
   tags: [],
   remindDifficult: null,
   allDayLong: false,
+  eventReminds: [],
 });
+
+const reminders = ref([
+  {
+    id: "1",
+    title: "Доделать диаграмму",
+  },
+  {
+    id: "2",
+    title: "Вставить картинки",
+    description: "Диаграммы",
+    time: new Date("2024-01-22T10:00:00"),
+  },
+  {
+    id: "3",
+    title: "Дополнить источники",
+  },
+  {
+    id: "4",
+    title: "Поправить описание разделов",
+    description: "4 раздел",
+    time: new Date("2024-01-22T09:00:00"),
+  },
+  {
+    id: "5",
+    title: "Отправить правки",
+    description: "на почту руководителю",
+    time: new Date("2024-01-18T18:00:00"),
+  },
+]);
 
 const taskType = computed(() => route.params.type);
 const taskTypeEvent = computed(() => taskType.value === "event");

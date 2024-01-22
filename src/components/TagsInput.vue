@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts" setup>
-import { nextTick, ref, watch, defineEmits } from "vue";
+import { nextTick, ref, defineEmits } from "vue";
 import { ElInput } from "element-plus";
 
 const inputValue = ref("");
