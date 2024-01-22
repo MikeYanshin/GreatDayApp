@@ -1,48 +1,44 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
-import CalendarView from "../views/CalendarView.vue";
-import LoginView from "@/views/LoginView.vue";
+import CalendarPage from "@/pages/CalendarPage.vue";
+import LoginPage from "@/pages/LoginPage.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
     name: "home",
-    component: CalendarView,
+    component: CalendarPage,
   },
   {
     path: "/auth",
     name: "auth",
-    component: LoginView,
-  },
-  {
-    path: "/about",
-    name: "about",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
+    component: LoginPage,
   },
   {
     path: "/create-task/:type",
     name: "create-task",
     meta: { transition: "slide-left" }, // TODO Добавить анимацию роута
-    component: () => import("../views/AddTaskView.vue"),
+    component: () => import("@/pages/CreateTaskPage.vue"),
   },
   {
     path: "/reminders",
     name: "reminders",
-    component: () => import("../views/RemindersView.vue"),
+    component: () => import("@/pages/RemindersPage.vue"),
   },
   {
     path: "/reminders/:type",
     name: "remind-list",
     meta: { transition: "slide-left" },
-    component: () => import("../views/RemindersListView.vue"),
+    component: () => import("@/pages/RemindersListPage.vue"),
   },
   {
     path: "/settings",
     name: "settings",
-    component: () => import("../views/SettingsView.vue"),
+    component: () => import("@/pages/SettingsPage.vue"),
+  },
+  {
+    path: "/profile",
+    name: "profile",
+    component: () => import("@/pages/ProfilePage.vue"),
   },
 ];
 

@@ -133,5 +133,6 @@ const handleSelection = (e: IRemind) => {
 .collapse :deep(.el-collapse-item__header) {
   font-weight: bold;
   font-size: 16px;
+  color: black;
 }
 </style>

@@ -64,6 +64,7 @@ const route = useRoute();
 const onHomePage = computed(() => route.name === "home");
 const onRemindersPage = computed(() => route.name === "reminders");
 const onSettingsPage = computed(() => route.name === "settings");
+const onProfilePage = computed(() => route.name === "profile");
 const addTaskListVisible = ref(false);
 const addTask = (type: string, event: Event) => {
   event.stopPropagation();

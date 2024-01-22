@@ -1,11 +1,13 @@
 <template>
   <header>
-    <el-icon size="small" color="white" @click="toggleSideMenu">
+    <el-icon class="icon" size="small" color="white" @click="toggleSideMenu">
       <Expand />
     </el-icon>
     <span>{{ currentDay.month }}</span>
     <span>{{ currentDay.day }} {{ currentDay.date }}</span>
-    <el-avatar :size="28">М</el-avatar>
+    <el-avatar :src="avatarUrl" @click="router.push('profile')" :size="28"
+      >М</el-avatar
+    >
   </header>
 
   <transition name="slide">
@@ -17,8 +19,11 @@
 import { Expand } from "@element-plus/icons-vue";
 import SideMenu from "@/components/SideMenu.vue";
 import { computed } from "vue";
+const router = useRouter();
+const route = useRoute();
 
 import { useSideMenuStore } from "@/store";
+import { useRoute, useRouter } from "vue-router";
 
 const sideMenuStore = useSideMenuStore();
 const avatarUrl =
@@ -28,6 +33,7 @@ const isMenuOpen = computed(() => {
   return sideMenuStore.isOpen;
 });
 
+const onProfilePage = computed(() => route.name === "profile");
 const currentDay = computed(() => {
   const date = new Date();
   const day = date.toLocaleDateString("ru-RU", { weekday: "long" });
@@ -45,7 +51,11 @@ const toggleSideMenu = () => {
 };
 </script>
 
-<style>
+<style scoped>
+.icon {
+  height: 24px;
+  width: 24px;
+}
 header {
   display: flex;
   justify-content: space-between;
