@@ -31,7 +31,7 @@
           class="date-picker"
           v-model="taskData.startTime"
           type="datetime"
-          placeholder="Дата начала"
+          placeholder="Время начала"
         />
       </el-config-provider>
     </label>
@@ -43,7 +43,7 @@
           class="date-picker"
           v-model="taskData.endTime"
           type="datetime"
-          placeholder="Дата конец"
+          placeholder="Время окончания"
         />
       </el-config-provider>
     </label>
@@ -62,7 +62,7 @@
         <el-color-picker size="small" v-model="taskData.color" />
       </el-config-provider>
     </label>
-    <label>
+    <label v-if="taskTypeEvent">
       <span class="label-title">Связанные напоминания</span>
       <el-select
         multiple
@@ -80,7 +80,7 @@
         />
       </el-select>
     </label>
-    <label>
+    <label v-if="taskTypeRemind">
       <span v-if="taskData.tags.length" class="label-title">Тэги</span>
       <TagsInput v-model="taskData.tags" />
     </label>

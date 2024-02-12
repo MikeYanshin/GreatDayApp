@@ -8,7 +8,7 @@
     <div class="reminders-list-title">{{ listTitle }}</div>
 
     <el-collapse class="collapse padding" v-model="activeCollapse">
-      <el-collapse-item title="Правки диплома" name="1">
+      <el-collapse-item title="Работа" name="1">
         <div class="reminders-list padding">
           <RemindItem
             v-for="item in reminders"
@@ -46,45 +46,45 @@ const activeCollapse = ref(["1"]);
 
 const route = useRoute();
 const reminders = ref([
-  {
-    id: "1",
-    title: "Доделать диаграмму",
-    event: "Правки диплома",
-  },
+  // {
+  //   id: "1",
+  //   title: "Доделать диаграмму",
+  //   event: "Правки диплома",
+  // },
   {
     id: "2",
-    title: "Вставить картинки",
-    description: "Диаграммы",
-    time: new Date("2024-01-22T10:00:00"),
-    event: "Правки диплома",
+    title: "Отредактировать документ",
+    description: "Для Романа",
+    // time: new Date("2024-01-22T10:00:00"),
+    // event: "Правки диплома",
   },
-  {
-    id: "3",
-    title: "Дополнить источники",
-    event: "Правки диплома",
-  },
-  {
-    id: "4",
-    title: "Поправить описание разделов",
-    description: "4 раздел",
-    time: new Date("2024-01-22T09:00:00"),
-  },
-  {
-    id: "5",
-    title: "Отправить правки",
-    description: "на почту руководителю",
-    time: new Date("2024-01-18T18:00:00"),
-  },
+  // {
+  //   id: "3",
+  //   title: "Дополнить источники",
+  //   event: "Правки диплома",
+  // },
+  // {
+  //   id: "4",
+  //   title: "Поправить описание разделов",
+  //   description: "4 раздел",
+  //   time: new Date("2024-01-22T09:00:00"),
+  // },
+  // {
+  //   id: "5",
+  //   title: "Отправить правки",
+  //   description: "на почту руководителю",
+  //   time: new Date("2024-01-18T18:00:00"),
+  // },
 ]);
 const freeReminders = ref([
-  {
-    id: "6",
-    title: "Помыть машину",
-  },
-  {
-    id: "7",
-    title: "Сходить на почту",
-  },
+  // {
+  //   id: "6",
+  //   title: "Помыть машину",
+  // },
+  // {
+  //   id: "7",
+  //   title: "Сходить на почту",
+  // },
 ]);
 
 const listTitle = computed(() => route.params.type);

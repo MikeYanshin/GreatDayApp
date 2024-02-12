@@ -7,37 +7,48 @@
           <el-icon><Files /></el-icon>
           <span class="card-desc-text">Все</span>
         </div>
-        <div class="card-count">10</div>
+        <div class="card-count">1</div>
       </div>
       <div class="card today">
         <div class="card-desc">
           <el-icon><Calendar /></el-icon>
           <span class="card-desc-text">Сегодня</span>
         </div>
-        <div class="card-count">5</div>
+        <div class="card-count">0</div>
       </div>
       <div class="card done">
         <div class="card-desc">
           <el-icon><Select /></el-icon>
           <span class="card-desc-text">Выполнено</span>
         </div>
-        <div class="card-count">3</div>
+        <div class="card-count">0</div>
       </div>
       <div class="card plans">
         <div class="card-desc">
           <el-icon><Clock /></el-icon>
           <span class="card-desc-text">В планах</span>
         </div>
-        <div class="card-count">2</div>
+        <div class="card-count">0</div>
       </div>
     </div>
-    <div class="tags-title">Тэги</div>
-    <div class="reminders-tags">
-      <div class="tag" v-for="tag in tags" :key="tag">
-        {{ tag }}
+    <template v-if="tags.length">
+      <div class="tags-title">Тэги</div>
+      <div class="reminders-tags">
+        <div class="tag" v-for="tag in tags" :key="tag">
+          {{ tag }}
+        </div>
       </div>
+    </template>
+    <div class="reminders-actions">
+      <el-button
+        plain
+        text
+        type="primary"
+        @click="router.push(`/create-task/remind`)"
+      >
+        + Напоминание
+      </el-button>
     </div>
-    <br />
   </div>
 </template>
 <script setup lang="ts">
@@ -47,7 +58,8 @@ import { useRouter } from "vue-router";
 
 const router = useRouter();
 const search = ref("");
-const tags = ["Все тэги", "#Диплом", "#Работа", "#Отпуск"];
+// const tags = ["Все тэги", "#Диплом", "#Работа", "#Отпуск"];
+const tags = ["Работа"];
 
 const selectCard = (type: string) => {
   router.push(`/reminders/${type}`);
@@ -131,5 +143,10 @@ const selectCard = (type: string) => {
   text-align: left;
   margin: 14px 0;
   color: black;
+}
+
+.reminders-actions {
+  position: fixed;
+  bottom: 18px;
 }
 </style>

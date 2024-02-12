@@ -1,13 +1,13 @@
 <template>
-  <div class="event" :style="{ height: eventHeight(data.dur) + 'px' }">
+  <div class="event" :style="{ height: eventHeight(dur) + 'px' }">
     <!-- <div
       v-if="hasPin"
       class="event_pin"
       :style="{ 'background-color': color }"
     ></div> -->
     <div class="event_time">{{ time }}</div>
-    <div class="event_name">{{ data.title }}</div>
-    <div class="duration">{{ formattedDuration }}</div>
+    <div class="event_name">{{ data.name }}</div>
+    <!--    <div class="duration">{{ formattedDuration }}</div>-->
   </div>
 </template>
 
@@ -22,21 +22,35 @@ const props = defineProps({
 });
 
 const time = computed(() => {
+  console.log(props.data, "props.data");
+  const start = new Date(props.data.startDate);
+  const end = new Date(props.data.startDate);
   // Получаем часы и минуты из времени события
-  const hours = props.data.startTime.getHours();
-  const minutes = props.data.startTime.getMinutes();
+  const hours = start.getHours();
+  const minutes = end.getMinutes();
 
-  // Добавляем ведущий ноль, если часы или минуты меньше 10
+  // // Добавляем ведущий ноль, если часы или минуты меньше 10
   const formattedHours = hours < 10 ? "0" + hours : hours;
   const formattedMinutes = minutes < 10 ? "0" + minutes : minutes;
-
-  // Возвращаем строку в формате "hh:mm"
+  //
+  // // Возвращаем строку в формате "hh:mm"
   return `${formattedHours}:${formattedMinutes}`;
 });
 
+const dur = computed(() => {
+  const start = new Date(props.data.startDate);
+  const end = new Date(props.data.endDate);
+
+  // Разница в миллисекундах
+  const difference = end.getTime() - start.getTime();
+
+  // Преобразуем разницу в минуты и округляем до целого числа
+  return Math.round(difference / (1000 * 60));
+});
+
 const formattedDuration = computed(() => {
-  const hours = Math.floor(props.data.dur / 60);
-  const minutes = props.data.dur % 60;
+  const hours = Math.floor(dur.value / 60);
+  const minutes = dur.value % 60;
 
   if (hours === 0) {
     return `${minutes}мин`;

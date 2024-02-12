@@ -17,7 +17,7 @@
         </div>
 
         <calendar-event
-          v-for="(event, index) in events"
+          v-for="(event, index) in responseData"
           :key="index"
           :data="event"
           class="calendar-event"
@@ -29,22 +29,22 @@
 </template>
 
 <script setup lang="ts">
+import { api } from "@/js/api/api";
+
 type Event = {
   id: number;
-  title: string;
-  startTime: Date;
-  dur: number;
+  name: string;
+  startDate: string;
+  endDate: string;
 };
 
-import { reactive, computed } from "vue";
+import { reactive, computed, onMounted, ref } from "vue";
 import CalendarEvent from "../components/CalendarEvent.vue";
 const day = new Date();
 const now = new Date();
 const minutes = now.getMinutes() + now.getHours() * 60;
 
-const scrollPercent = computed(
-  () => ((minutes - 0) / (60 * 24 - 0)) * (100 - 0) - 2
-);
+const scrollPercent = computed(() => (minutes / (60 * 24)) * 100 - 2);
 
 // const hours = ref(
 //   Array.from({ length: 24 }, (_, i) => `${i.toString().padStart(2, "0")}:00`)
@@ -53,28 +53,28 @@ const scrollPercent = computed(
 const events = reactive([
   {
     id: 1,
-    title: "Поездка на работу",
-    startTime: new Date(2024, 0, 13, 10, 0, 0),
+    title: "Обсуждение документа с Романом",
+    startTime: new Date(2024, 0, 13, 18, 0, 0),
     dur: 60,
   },
-  {
-    id: 2,
-    title: "Зарядка и завтрак",
-    startTime: new Date(2024, 0, 13, 7, 0, 0),
-    dur: 90,
-  },
-  {
-    id: 3,
-    title: "Деловая встреча",
-    startTime: new Date(2024, 0, 13, 16, 0, 0),
-    dur: 120,
-  },
-  {
-    id: 4,
-    title: "Мешать соседям",
-    startTime: new Date(2024, 0, 13, 0, 0, 0),
-    dur: 15,
-  },
+  // {
+  //   id: 2,
+  //   title: "Зарядка и завтрак",
+  //   startTime: new Date(2024, 0, 13, 7, 0, 0),
+  //   dur: 90,
+  // },
+  // {
+  //   id: 3,
+  //   title: "Деловая встреча",
+  //   startTime: new Date(2024, 0, 13, 16, 0, 0),
+  //   dur: 120,
+  // },
+  // {
+  //   id: 4,
+  //   title: "Мешать соседям",
+  //   startTime: new Date(2024, 0, 13, 0, 0, 0),
+  //   dur: 15,
+  // },
   // { id: 2, title: "Событие 2", startTime: "12:00", endTime: "13:00", dur: 60 },
   /* ... */
 ]);
@@ -93,20 +93,39 @@ const events = reactive([
 // };
 
 const eventScrollTop = (event: Event) => {
-  const eventTime =
-    event.startTime instanceof Date
-      ? event.startTime
-      : new Date(event.startTime);
+  const eventTime = new Date(event.startDate);
 
   // Получаем часы и минуты из времени события
   const hours = eventTime.getHours();
   const minutes = eventTime.getMinutes();
+
+  console.log(hours, "hours", minutes, "minutes");
 
   // Вычисляем общее количество минут с полуночи
   const minutesFromMidnight = hours * 60 + minutes;
 
   return minutesFromMidnight - 2;
 };
+
+const isLoading = ref(false);
+const responseData = ref<any>(null);
+const error = ref<string | null>(null);
+
+const fetchData = async () => {
+  isLoading.value = true;
+  try {
+    const data = await api.getEventList();
+    responseData.value = data;
+  } catch (err) {
+    error.value = "Error fetching data";
+  } finally {
+    isLoading.value = false;
+  }
+};
+
+onMounted(() => {
+  fetchData();
+});
 </script>
 
 <style scoped>

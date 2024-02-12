@@ -9,7 +9,6 @@
       :disable-transitions="false"
       @close="handleClose(tag)"
       effect="plain"
-      round
     >
       {{ tag }}
     </el-tag>

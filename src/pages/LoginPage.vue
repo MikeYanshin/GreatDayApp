@@ -1,27 +1,38 @@
 <template>
-  <form @submit.prevent="submitForm" class="login-form">
+  <form class="login-form">
+    <div class="side-menu-header">Great Day</div>
     <div class="header">Есть аккаунт?</div>
     <br />
     <el-input
+      class="input"
       v-model="email"
       placeholder="Email"
+      size="large"
+      clearable
       :error="emailError"
+      :prefix-icon="Avatar"
       accentColor="white"
       inputType="email"
     />
     <el-input
+      class="input"
       v-model="password"
       placeholder="Пароль"
       accentColor="white"
-      @icon-click="showPassword"
+      :prefix-icon="Key"
+      show-password
+      clearable
+      size="large"
       :inputType="passwordInputType"
     >
-      <template #icon>
-        <img class="password-icon" :src="passwordIcon" />
-      </template>
     </el-input>
 
-    <el-button textColor="#3e3e3e">
+    <el-button
+      textColor="#3e3e3e"
+      class="button"
+      type="primary"
+      @click="submitForm"
+    >
       {{ isLogined ? "Войти" : "Зарегистрироваться" }}
     </el-button>
     <div class="remember">
@@ -36,6 +47,9 @@ import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
 import { isLogined } from "@/js/helpers/isLogined";
 import { useNotifyStore } from "@/store";
+import { ElMessage } from "element-plus";
+
+import { Avatar, Key } from "@element-plus/icons-vue";
 
 const email = ref("");
 const password = ref("");
@@ -52,9 +66,9 @@ const submitForm = () => {
   }
 
   if (!email.value || !password.value) {
-    showNotify({
-      header: "Неправильный адрес электронной почты или пароль",
-      type: "danger",
+    ElMessage({
+      message: "Неправильный адрес электронной почты или пароль.",
+      type: "error",
     });
 
     return;
@@ -69,8 +83,8 @@ const submitForm = () => {
     // Perform registration logic here
     // Save user data to local storage or backend
     localStorage.setItem("user", JSON.stringify(user));
-    showNotify({
-      header: "Вы зарегистрированы!",
+    ElMessage({
+      message: "Вы зарегистрированы!",
       type: "success",
     });
     router.push("/");
@@ -94,24 +108,6 @@ const submitForm = () => {
     type: "danger",
   });
 };
-
-const showPassword = () => {
-  if (passwordInputType.value == "text") {
-    passwordInputType.value = "password";
-  } else {
-    passwordInputType.value = "text";
-  }
-};
-
-const passwordIcon = computed(() => {
-  const hidePasswordImgUrl =
-    "https://icons.veryicon.com/png/o/miscellaneous/hekr/action-hide-password.png";
-  const showPasswordImgUrl =
-    "https://cdn-icons-png.flaticon.com/512/6803/6803345.png";
-  return passwordInputType.value == "text"
-    ? hidePasswordImgUrl
-    : showPasswordImgUrl;
-});
 </script>
 
 <style scoped>
@@ -120,19 +116,13 @@ const passwordIcon = computed(() => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100%;
+  height: 100vh;
   padding: 0 24px;
-  background-image: linear-gradient(
-    to bottom,
-    rgba(46, 142, 232, 0.5),
-    rgba(106, 106, 140, 0.5)
-  );
-  /* url("catfront.png"); */
+  background: #efefef;
 }
 
-input {
+.input {
   margin-bottom: 10px;
-  padding: 5px;
 }
 
 .error-message {
@@ -145,8 +135,12 @@ input {
   opacity: 1;
 }
 
+.button {
+  width: 100%;
+}
+
 .header {
-  color: aliceblue;
+  color: black;
   font-weight: bold;
   margin-bottom: 24px;
   font-size: 20px;
@@ -156,12 +150,29 @@ input {
   margin-top: 24px;
   width: 100%;
   display: flex;
-  color: aliceblue;
+  color: black;
   font-size: 16px;
   gap: 4px;
 }
 
 .password-icon {
   height: 24px;
+}
+
+.side-menu-header {
+  font-family: Helvetica, sans-serif;
+  font-weight: 100;
+  font-size: 50px;
+  background: linear-gradient(
+    0deg,
+    rgba(51, 126, 204, 1) 0%,
+    rgba(64, 158, 255, 1) 55%,
+    rgba(198, 226, 255, 1) 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  position: fixed;
+  top: 50px;
 }
 </style>
