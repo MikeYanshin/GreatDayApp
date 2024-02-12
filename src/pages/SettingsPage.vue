@@ -117,9 +117,6 @@ const dateFormat = ref([
 const selectedTimezone = ref();
 const selectedTimeFormat = ref();
 const selectedDateFormat = ref();
-const handleChange = (value: number) => {
-  console.log(value);
-};
 </script>
 <style scoped>
 .settings-page {

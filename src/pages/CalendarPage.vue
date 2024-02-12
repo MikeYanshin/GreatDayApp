@@ -99,8 +99,6 @@ const eventScrollTop = (event: Event) => {
   const hours = eventTime.getHours();
   const minutes = eventTime.getMinutes();
 
-  console.log(hours, "hours", minutes, "minutes");
-
   // Вычисляем общее количество минут с полуночи
   const minutesFromMidnight = hours * 60 + minutes;
 

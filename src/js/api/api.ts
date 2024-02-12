@@ -12,15 +12,13 @@ const instance = axios.create({
     // Добавьте любые другие заголовки, которые вам нужны
   },
 });
-
 export const api = {
   async fetchData(): Promise<any> {
     try {
       const response = await instance.get("/data");
       return response.data;
     } catch (error) {
-      // throw new Error(error);
-      console.error(error);
+      throw new Error(error as any);
     }
   },
 
@@ -29,8 +27,7 @@ export const api = {
       const response = await instance.post("/event", data);
       return response.data;
     } catch (error) {
-      // throw new Error(error);
-      console.error(error);
+      throw new Error(error as any);
     }
   },
 
@@ -43,10 +40,80 @@ export const api = {
         ...item.attributes,
       }));
     } catch (error) {
-      // throw new Error(error);
-      console.error(error);
+      throw new Error(error as any);
+    }
+  },
+
+  async updateRemind(id: number, params: any): Promise<any> {
+    try {
+      await instance.put(`/reminds/${id}`, params);
+    } catch (error) {
+      throw new Error(error as any);
+    }
+  },
+
+  async createRemind(params: any): Promise<any> {
+    try {
+      await instance.post(`/reminds`, params);
+    } catch (error) {
+      throw new Error(error as any);
+    }
+  },
+
+  async getRemindsList(params?: string): Promise<any> {
+    try {
+      const response = await instance.get(`/reminds${params}`);
+
+      const reminds = response.data.data.map((item: any) => ({
+        id: item.id,
+        ...item.attributes,
+      }));
+      const doneReminds = countDoneTasks(reminds);
+      const todayReminds = countTasksWithTodayDate(reminds);
+
+      return {
+        reminds: {
+          ...reminds,
+        },
+        doneReminds,
+        todayReminds,
+        total: response.data.meta.pagination.total - doneReminds,
+      };
+    } catch (error) {
+      throw new Error(error as any);
+    }
+  },
+
+  async getTagsList(): Promise<any> {
+    try {
+      const response = await instance.get("/tags");
+
+      return response.data.data.map((item: any) => ({
+        id: item.id,
+        ...item.attributes,
+      }));
+    } catch (error) {
+      throw new Error(error as any);
     }
   },
 
   // Добавьте другие запросы по мере необходимости
 };
+
+function countDoneTasks(tasks: any) {
+  let count = 0;
+  tasks.forEach((task: any) => {
+    if (task.done === true) {
+      count++;
+    }
+  });
+  return count;
+}
+
+function countTasksWithTodayDate(tasks: any) {
+  const today = new Date().toISOString().slice(0, 10); // Получаем сегодняшнюю дату в формате 'YYYY-MM-DD'
+  const doneTasksToday = tasks.filter(
+    (task: any) => !task.done && task.date.slice(0, 10) === today
+  );
+  return doneTasksToday.length;
+}

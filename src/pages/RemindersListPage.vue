@@ -7,21 +7,21 @@
     </div>
     <div class="reminders-list-title">{{ listTitle }}</div>
 
-    <el-collapse class="collapse padding" v-model="activeCollapse">
-      <el-collapse-item title="Работа" name="1">
-        <div class="reminders-list padding">
-          <RemindItem
-            v-for="item in reminders"
-            :remind="item"
-            v-bind:key="item.id"
-            @select="handleSelection(item)"
-          />
-        </div>
-      </el-collapse-item>
-    </el-collapse>
+    <!--    <el-collapse class="collapse padding" v-model="activeCollapse">-->
+    <!--      <el-collapse-item title="Работа" name="1">-->
+    <!--        <div class="reminders-list padding">-->
+    <!--          <RemindItem-->
+    <!--            v-for="item in reminders"-->
+    <!--            :remind="item"-->
+    <!--            v-bind:key="item.id"-->
+    <!--            @select="handleSelection(item)"-->
+    <!--          />-->
+    <!--        </div>-->
+    <!--      </el-collapse-item>-->
+    <!--    </el-collapse>-->
     <div class="reminders-list padding">
       <RemindItem
-        v-for="item in freeReminders"
+        v-for="item in remindsList"
         :remind="item"
         v-bind:key="item.id"
         @select="handleSelection(item)"
@@ -30,6 +30,8 @@
   </div>
 </template>
 <script setup lang="ts">
+import { api } from "@/js/api/api";
+
 type IRemind = {
   id: string;
   title: string;
@@ -40,7 +42,7 @@ type IRemind = {
 import { ArrowLeft } from "@element-plus/icons-vue";
 const router = useRouter();
 import { useRoute, useRouter } from "vue-router";
-import { computed, ref } from "vue";
+import { computed, onBeforeMount, ref } from "vue";
 import RemindItem from "@/components/RemindItem.vue";
 const activeCollapse = ref(["1"]);
 
@@ -88,11 +90,39 @@ const freeReminders = ref([
 ]);
 
 const listTitle = computed(() => route.params.type);
-const handleSelection = (e: IRemind) => {
-  setTimeout(() => {
-    reminders.value = reminders.value.filter((task) => task !== e);
+const handleSelection = (remind: any) => {
+  const data = {
+    data: {
+      done: true,
+    },
+  };
+
+  setTimeout(async () => {
+    await api.updateRemind(remind.id, data);
+    await getReminds();
   }, 750);
 };
+
+const isLoading = ref(false);
+const remindsList = ref<any>(null);
+const error = ref<string | null>(null);
+
+const getReminds = async () => {
+  isLoading.value = true;
+  try {
+    const data = await api.getRemindsList("?filters[done][$eq]=false");
+    remindsList.value = data.reminds;
+    console.log(remindsList.value);
+  } catch (err) {
+    error.value = "Error fetching data";
+  } finally {
+    isLoading.value = false;
+  }
+};
+
+onBeforeMount(() => {
+  getReminds();
+});
 </script>
 <style scoped>
 .reminders-list-view {

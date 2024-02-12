@@ -22,7 +22,6 @@ const props = defineProps({
 });
 
 const time = computed(() => {
-  console.log(props.data, "props.data");
   const start = new Date(props.data.startDate);
   const end = new Date(props.data.startDate);
   // Получаем часы и минуты из времени события

@@ -3,52 +3,41 @@
     <div class="task-actions">
       <el-button text bg @click="router.back()">Отменить</el-button>
       <div>Добавить {{ pageHeader }}</div>
-      <el-button
-        text
-        bg
-        type="primary"
-        @click="
-          () => {
-            console.log(taskData);
-          }
-        "
-      >
-        Сохранить
-      </el-button>
+      <el-button text bg type="primary" @click="create"> Сохранить </el-button>
     </div>
     <label>
-      <span class="label-title">Название</span>
+      <span class="label-name">Название</span>
       <el-input
-        v-model="taskData.title"
+        v-model="taskData.name"
         placeholder="Введите название"
       ></el-input>
     </label>
     <label class="">
-      <span class="label-title">Начало</span>
+      <span class="label-name">Начало</span>
       <el-config-provider :locale="ru">
         <el-date-picker
           style="width: -webkit-fill-available !important"
           class="date-picker"
-          v-model="taskData.startTime"
+          v-model="taskData.startDate"
           type="datetime"
           placeholder="Время начала"
         />
       </el-config-provider>
     </label>
     <label v-if="taskTypeEvent" class="">
-      <span class="label-title">Конец</span>
+      <span class="label-name">Конец</span>
       <el-config-provider :locale="ru">
         <el-date-picker
           style="width: -webkit-fill-available !important"
           class="date-picker"
-          v-model="taskData.endTime"
+          v-model="taskData.endDate"
           type="datetime"
           placeholder="Время окончания"
         />
       </el-config-provider>
     </label>
     <label>
-      <span class="label-title">Описание</span>
+      <span class="label-name">Описание</span>
       <el-input
         v-model="taskData.description"
         :rows="2"
@@ -57,13 +46,13 @@
       />
     </label>
     <label class="inline" v-if="taskTypeEvent">
-      <span class="label-title">Выбрать цвет</span>
+      <span class="label-name">Выбрать цвет</span>
       <el-config-provider :locale="ru">
         <el-color-picker size="small" v-model="taskData.color" />
       </el-config-provider>
     </label>
     <label v-if="taskTypeEvent">
-      <span class="label-title">Связанные напоминания</span>
+      <span class="label-name">Связанные напоминания</span>
       <el-select
         multiple
         collapse-tags
@@ -75,13 +64,13 @@
         <el-option
           v-for="remind in reminders"
           :key="remind.id"
-          :label="remind.title"
+          :label="remind.name"
           :value="remind.id"
         />
       </el-select>
     </label>
     <label v-if="taskTypeRemind">
-      <span v-if="taskData.tags.length" class="label-title">Тэги</span>
+      <span v-if="taskData.tags.length" class="label-name">Тэги</span>
       <TagsInput v-model="taskData.tags" />
     </label>
   </div>
@@ -93,45 +82,45 @@ import { computed, ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
 
 import TagsInput from "@/components/TagsInput.vue";
+import { api } from "@/js/api/api";
+import { ElMessage } from "element-plus";
 const router = useRouter();
 const route = useRoute();
 
 const taskData = ref({
-  title: "",
-  startTime: "",
-  endTime: "",
+  name: "",
+  startDate: "",
+  endDate: "",
   description: "",
   color: "#ccc",
   tags: [],
-  remindDifficult: null,
-  allDayLong: false,
   eventReminds: [],
 });
 
 const reminders = ref([
   {
     id: "1",
-    title: "Доделать диаграмму",
+    name: "Доделать диаграмму",
   },
   {
     id: "2",
-    title: "Вставить картинки",
+    name: "Вставить картинки",
     description: "Диаграммы",
     time: new Date("2024-01-22T10:00:00"),
   },
   {
     id: "3",
-    title: "Дополнить источники",
+    name: "Дополнить источники",
   },
   {
     id: "4",
-    title: "Поправить описание разделов",
+    name: "Поправить описание разделов",
     description: "4 раздел",
     time: new Date("2024-01-22T09:00:00"),
   },
   {
     id: "5",
-    title: "Отправить правки",
+    name: "Отправить правки",
     description: "на почту руководителю",
     time: new Date("2024-01-18T18:00:00"),
   },
@@ -140,12 +129,66 @@ const reminders = ref([
 const taskType = computed(() => route.params.type);
 const taskTypeEvent = computed(() => taskType.value === "event");
 const taskTypeRemind = computed(() => taskType.value === "remind");
-const submitChange = (type, event) => {
-  taskData.value[type] = new Date(event.target.value);
-};
 const pageHeader = computed(() =>
   taskTypeEvent.value ? "событие" : "напоминание"
 );
+
+const create = () => {
+  taskTypeEvent.value ? createEvent() : createRemind();
+};
+
+const createEvent = async () => {
+  const data = {
+    data: {
+      name: taskData.value.name,
+      date: taskData.value.startDate.toISOString(),
+      description: taskData.value.description,
+    },
+  };
+
+  try {
+    await api.createRemind(data);
+    router.back();
+    ElMessage({
+      message: `Событие создано`,
+      type: "success",
+      duration: 1500,
+    });
+  } catch {
+    ElMessage({
+      message: "Произошла ошибка",
+      type: "error",
+      duration: 1500,
+    });
+  }
+};
+
+const createRemind = async () => {
+  const data = {
+    data: {
+      name: taskData.value.name,
+      date: taskData.value.startDate.toISOString(),
+      description: taskData.value.description,
+      tags: taskData.value.tags,
+    },
+  };
+
+  try {
+    await api.createRemind(data);
+    router.back();
+    ElMessage({
+      message: `Напоминание создано`,
+      type: "success",
+      duration: 1500,
+    });
+  } catch {
+    ElMessage({
+      message: "Произошла ошибка",
+      type: "error",
+      duration: 1500,
+    });
+  }
+};
 </script>
 
 <style scoped>
