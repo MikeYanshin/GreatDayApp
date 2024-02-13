@@ -161,4 +161,8 @@ body {
   margin-right: 8px;
   font-size: large;
 }
+
+:deep(.el-picker-panel__content, .el-date-picker__header) {
+  font-family: Helvetica, sans-serif !important;
+}
 </style>

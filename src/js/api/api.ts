@@ -22,10 +22,27 @@ export const api = {
     }
   },
 
-  async createEvent(data: any): Promise<any> {
+  async createEvent(params: any): Promise<any> {
     try {
-      const response = await instance.post("/event", data);
-      return response.data;
+      await instance.post(`/events`, params);
+    } catch (error) {
+      throw new Error(error as any);
+    }
+  },
+
+  async getEventById(id: string): Promise<any> {
+    try {
+      const response = await instance.get(`/events/${id}`);
+
+      return response.data.data.attributes;
+    } catch (error) {
+      throw new Error(error as any);
+    }
+  },
+
+  async deleteEventById(id: string): Promise<any> {
+    try {
+      await instance.delete(`/events/${id}`);
     } catch (error) {
       throw new Error(error as any);
     }
@@ -79,6 +96,24 @@ export const api = {
         todayReminds,
         total: response.data.meta.pagination.total - doneReminds,
       };
+    } catch (error) {
+      throw new Error(error as any);
+    }
+  },
+
+  async getRemindById(id: string): Promise<any> {
+    try {
+      const response = await instance.get(`/reminds/${id}`);
+
+      return response.data.data.attributes;
+    } catch (error) {
+      throw new Error(error as any);
+    }
+  },
+
+  async deleteRemindById(id: string): Promise<any> {
+    try {
+      await instance.delete(`/reminds/${id}`);
     } catch (error) {
       throw new Error(error as any);
     }

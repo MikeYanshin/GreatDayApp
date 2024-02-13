@@ -20,6 +20,12 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import("@/pages/CreateTaskPage.vue"),
   },
   {
+    path: "/task/:type/:id",
+    name: "task-page",
+    meta: { transition: "slide-left" },
+    component: () => import("@/pages/TaskPage.vue"),
+  },
+  {
     path: "/reminders",
     name: "reminders",
     component: () => import("@/pages/RemindersPage.vue"),

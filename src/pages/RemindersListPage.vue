@@ -32,13 +32,6 @@
 <script setup lang="ts">
 import { api } from "@/js/api/api";
 
-type IRemind = {
-  id: string;
-  title: string;
-  description?: string;
-  time?: Date;
-};
-
 import { ArrowLeft } from "@element-plus/icons-vue";
 const router = useRouter();
 import { useRoute, useRouter } from "vue-router";
@@ -47,49 +40,15 @@ import RemindItem from "@/components/RemindItem.vue";
 const activeCollapse = ref(["1"]);
 
 const route = useRoute();
-const reminders = ref([
-  // {
-  //   id: "1",
-  //   title: "Доделать диаграмму",
-  //   event: "Правки диплома",
-  // },
-  {
-    id: "2",
-    title: "Отредактировать документ",
-    description: "Для Романа",
-    // time: new Date("2024-01-22T10:00:00"),
-    // event: "Правки диплома",
-  },
-  // {
-  //   id: "3",
-  //   title: "Дополнить источники",
-  //   event: "Правки диплома",
-  // },
-  // {
-  //   id: "4",
-  //   title: "Поправить описание разделов",
-  //   description: "4 раздел",
-  //   time: new Date("2024-01-22T09:00:00"),
-  // },
-  // {
-  //   id: "5",
-  //   title: "Отправить правки",
-  //   description: "на почту руководителю",
-  //   time: new Date("2024-01-18T18:00:00"),
-  // },
-]);
-const freeReminders = ref([
-  // {
-  //   id: "6",
-  //   title: "Помыть машину",
-  // },
-  // {
-  //   id: "7",
-  //   title: "Сходить на почту",
-  // },
-]);
 
 const listTitle = computed(() => route.params.type);
+const remindersParams = computed(() => {
+  switch (route.params.type) {
+    case "Все":
+      return "?filters[done][$eq]=false";
+  }
+  return "";
+});
 const handleSelection = (remind: any) => {
   const data = {
     data: {
@@ -110,7 +69,7 @@ const error = ref<string | null>(null);
 const getReminds = async () => {
   isLoading.value = true;
   try {
-    const data = await api.getRemindsList("?filters[done][$eq]=false");
+    const data = await api.getRemindsList(remindersParams.value);
     remindsList.value = data.reminds;
     console.log(remindsList.value);
   } catch (err) {

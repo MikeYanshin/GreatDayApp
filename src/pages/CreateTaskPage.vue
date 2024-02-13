@@ -83,7 +83,7 @@ import { useRouter, useRoute } from "vue-router";
 
 import TagsInput from "@/components/TagsInput.vue";
 import { api } from "@/js/api/api";
-import { ElMessage } from "element-plus";
+import { showNotify } from "@/js/helpers/useNotify";
 const router = useRouter();
 const route = useRoute();
 
@@ -138,32 +138,53 @@ const create = () => {
 };
 
 const createEvent = async () => {
+  if (
+    !taskData.value.name &&
+    !taskData.value.startDate &&
+    !taskData.value.endDate
+  ) {
+    return showNotify({
+      type: "error",
+      duration: 1000,
+      message: `Заполните все поля`,
+    });
+  }
+
   const data = {
     data: {
       name: taskData.value.name,
-      date: taskData.value.startDate.toISOString(),
+      startDate: taskData.value.startDate.toISOString(),
+      endDate: taskData.value.endDate.toISOString(),
       description: taskData.value.description,
+      color: taskData.value.color,
     },
   };
 
   try {
-    await api.createRemind(data);
+    await api.createEvent(data);
     router.back();
-    ElMessage({
-      message: `Событие создано`,
+    showNotify({
       type: "success",
       duration: 1500,
+      message: `Событие создано`,
     });
   } catch {
-    ElMessage({
-      message: "Произошла ошибка",
+    showNotify({
       type: "error",
       duration: 1500,
+      message: `Произошла ошибка`,
     });
   }
 };
 
 const createRemind = async () => {
+  if (!taskData.value.name && !taskData.value.startDate) {
+    return showNotify({
+      type: "error",
+      duration: 1000,
+      message: `Заполните все поля`,
+    });
+  }
   const data = {
     data: {
       name: taskData.value.name,
@@ -176,16 +197,16 @@ const createRemind = async () => {
   try {
     await api.createRemind(data);
     router.back();
-    ElMessage({
-      message: `Напоминание создано`,
+    showNotify({
       type: "success",
       duration: 1500,
+      message: `Напоминание создано`,
     });
   } catch {
-    ElMessage({
-      message: "Произошла ошибка",
+    showNotify({
       type: "error",
       duration: 1500,
+      message: `Произошла ошибка`,
     });
   }
 };
@@ -210,7 +231,7 @@ const createRemind = async () => {
 
 .date-picker {
   margin-bottom: 24px;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Helvetica, sans-serif;
   width: 100%;
   padding: 4px 8px;
   border: none;

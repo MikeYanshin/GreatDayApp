@@ -1,13 +1,14 @@
 <template>
-  <div class="event" :style="{ height: eventHeight(dur) + 'px' }">
-    <!-- <div
-      v-if="hasPin"
-      class="event_pin"
-      :style="{ 'background-color': color }"
-    ></div> -->
+  <div
+    class="event"
+    :style="{
+      height: eventHeight(dur) + 'px',
+      backgroundColor: data.color || '#cccccc',
+    }"
+  >
     <div class="event_time">{{ time }}</div>
     <div class="event_name">{{ data.name }}</div>
-    <!--    <div class="duration">{{ formattedDuration }}</div>-->
+    <div class="duration">{{ formattedDuration }}</div>
   </div>
 </template>
 
@@ -71,11 +72,17 @@ const eventHeight = (dur: number) => {
   gap: 6px;
   padding-left: 8px;
   min-height: 20px;
+  border: 1px solid rgba(173, 153, 139, 0.5);
 }
 
 .duration {
   position: absolute;
   right: 5px;
-  color: #fff;
+  color: white;
+}
+
+.event_name,
+.event_time {
+  color: white;
 }
 </style>

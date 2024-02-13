@@ -19,11 +19,11 @@
 import { Expand } from "@element-plus/icons-vue";
 import SideMenu from "@/components/SideMenu.vue";
 import { computed } from "vue";
-const router = useRouter();
-const route = useRoute();
-
 import { useSideMenuStore } from "@/store";
 import { useRoute, useRouter } from "vue-router";
+
+const router = useRouter();
+const route = useRoute();
 
 const sideMenuStore = useSideMenuStore();
 const avatarUrl =

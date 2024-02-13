@@ -21,6 +21,7 @@
           :key="index"
           :data="event"
           class="calendar-event"
+          @click="router.push(`/task/event/${event.id}`)"
           :style="{ top: eventScrollTop(event) + 'px' }"
         ></calendar-event>
       </div>
@@ -29,8 +30,6 @@
 </template>
 
 <script setup lang="ts">
-import { api } from "@/js/api/api";
-
 type Event = {
   id: number;
   name: string;
@@ -38,8 +37,12 @@ type Event = {
   endDate: string;
 };
 
+import { api } from "@/js/api/api";
+import { useRouter } from "vue-router";
 import { reactive, computed, onMounted, ref } from "vue";
 import CalendarEvent from "../components/CalendarEvent.vue";
+
+const router = useRouter();
 const day = new Date();
 const now = new Date();
 const minutes = now.getMinutes() + now.getHours() * 60;
@@ -181,7 +184,6 @@ onMounted(() => {
 }
 
 .calendar-event {
-  background-color: #ccc;
   position: absolute;
   width: -webkit-fill-available;
   left: 48px;
