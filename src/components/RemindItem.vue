@@ -7,8 +7,13 @@
     ></button>
     <div class="remind-container">
       <div class="remind-container-title">{{ remind.name }}</div>
-      <div v-if="remind.description" class="remind-container-description">
-        {{ remind }}
+      <div class="remind-container-description">
+        <div class="description" v-if="remind.description">
+          {{ remind.description }}
+        </div>
+        <span class="tag" :key="tag.id" v-for="tag in remind.tags.data">
+          #{{ tag.attributes.name }}
+        </span>
       </div>
       <div
         v-if="remind.date"
@@ -75,12 +80,12 @@ const isPastTime = computed(() => date < new Date());
 
 .remind-container-title {
   color: black;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .remind-container-description {
-  color: #cccccc;
-  font-size: 12px;
+  color: #5e5e5e;
+  font-size: 16px;
 }
 
 .remind-container-info {
@@ -94,5 +99,20 @@ const isPastTime = computed(() => date < new Date());
   padding: 2px;
   border: 2px solid white;
   outline: 1px solid #ccc;
+}
+
+.description {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 300px;
+}
+
+.tag {
+  font-size: 14px;
+  color: #409eff;
+
+  :not:first-child {
+    margin-left: 4px;
+  }
 }
 </style>

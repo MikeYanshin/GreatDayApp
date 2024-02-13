@@ -74,12 +74,6 @@ const addTask = (type: string, event: Event) => {
 </script>
 <style>
 #app {
-  font-family: Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  height: 100vh;
 }
 
 nav {
@@ -164,5 +158,9 @@ body {
 
 :deep(.el-picker-panel__content, .el-date-picker__header) {
   font-family: Helvetica, sans-serif !important;
+}
+
+* {
+  font-family: Helvetica, sans-serif;
 }
 </style>

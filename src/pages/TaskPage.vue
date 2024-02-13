@@ -20,15 +20,19 @@
     </div>
     <div class="task-data-block" v-if="taskData.description">
       <div class="task-data-block-icon">
-        <el-icon><Tickets /></el-icon>
+        <el-icon size="24"><Tickets /></el-icon>
       </div>
       <div class="task-data-block-content">{{ taskData.description }}</div>
     </div>
     <div class="task-data-block">
       <div class="task-data-block-icon">
-        <el-icon><Bell /></el-icon>
+        <el-icon size="24"><Bell /></el-icon>
       </div>
-      <div class="task-data-block-content">Без напоминаний</div>
+      <div class="task-data-block-content">
+        <div v-for="remind in taskData?.reminds?.data" :key="remind.id">
+          {{ remind.attributes.name }}
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -85,8 +89,6 @@ const date = computed(() => {
       minute: "numeric",
     });
   } else {
-    console.log(taskData.value.startDate);
-
     const fullDate = startDate.toLocaleDateString("ru-RU", {
       weekday: "long",
       year: "numeric",

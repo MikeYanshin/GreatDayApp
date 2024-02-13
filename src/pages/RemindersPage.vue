@@ -72,7 +72,6 @@ const getReminds = async () => {
   isLoading.value = true;
   try {
     remindsList.value = await api.getRemindsList("");
-    console.log(remindsList.value, "remindsList.value");
   } catch (err) {
     error.value = "Error fetching data";
   } finally {
@@ -84,7 +83,6 @@ const getTags = async () => {
   isLoading.value = true;
   try {
     tagsList.value = await api.getTagsList();
-    console.log(tagsList.value, "tags");
   } catch (err) {
     error.value = "Error fetching data";
   } finally {

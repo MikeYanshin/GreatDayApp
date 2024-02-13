@@ -21,6 +21,7 @@
           v-model="taskData.startDate"
           type="datetime"
           placeholder="Время начала"
+          format="DD.MM.YYYY HH:mm"
         />
       </el-config-provider>
     </label>
@@ -33,6 +34,7 @@
           v-model="taskData.endDate"
           type="datetime"
           placeholder="Время окончания"
+          format="DD.MM.YYYY HH:mm"
         />
       </el-config-provider>
     </label>
@@ -62,7 +64,7 @@
         v-model="taskData.eventReminds"
       >
         <el-option
-          v-for="remind in reminders"
+          v-for="remind in remindsList"
           :key="remind.id"
           :label="remind.name"
           :value="remind.id"
@@ -78,7 +80,7 @@
 
 <script lang="ts" setup>
 import ru from "element-plus/dist/locale/ru.min";
-import { computed, ref } from "vue";
+import { computed, onBeforeMount, ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
 
 import TagsInput from "@/components/TagsInput.vue";
@@ -96,35 +98,6 @@ const taskData = ref({
   tags: [],
   eventReminds: [],
 });
-
-const reminders = ref([
-  {
-    id: "1",
-    name: "Доделать диаграмму",
-  },
-  {
-    id: "2",
-    name: "Вставить картинки",
-    description: "Диаграммы",
-    time: new Date("2024-01-22T10:00:00"),
-  },
-  {
-    id: "3",
-    name: "Дополнить источники",
-  },
-  {
-    id: "4",
-    name: "Поправить описание разделов",
-    description: "4 раздел",
-    time: new Date("2024-01-22T09:00:00"),
-  },
-  {
-    id: "5",
-    name: "Отправить правки",
-    description: "на почту руководителю",
-    time: new Date("2024-01-18T18:00:00"),
-  },
-]);
 
 const taskType = computed(() => route.params.type);
 const taskTypeEvent = computed(() => taskType.value === "event");
@@ -157,6 +130,9 @@ const createEvent = async () => {
       endDate: taskData.value.endDate.toISOString(),
       description: taskData.value.description,
       color: taskData.value.color,
+      reminds: {
+        connect: taskData.value.eventReminds,
+      },
     },
   };
 
@@ -190,7 +166,9 @@ const createRemind = async () => {
       name: taskData.value.name,
       date: taskData.value.startDate.toISOString(),
       description: taskData.value.description,
-      tags: taskData.value.tags,
+      tags: {
+        connect: taskData.value.tags,
+      },
     },
   };
 
@@ -210,6 +188,25 @@ const createRemind = async () => {
     });
   }
 };
+
+const isLoading = ref(false);
+const remindsList = ref<any>(null);
+const error = ref<string | null>(null);
+const getReminds = async () => {
+  isLoading.value = true;
+  try {
+    const data = await api.getRemindsList("?filters[done][$eq]=false");
+    remindsList.value = data.reminds;
+  } catch (err) {
+    error.value = "Error fetching data";
+  } finally {
+    isLoading.value = false;
+  }
+};
+
+onBeforeMount(() => {
+  getReminds();
+});
 </script>
 
 <style scoped>

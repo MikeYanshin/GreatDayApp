@@ -6,9 +6,11 @@
       backgroundColor: data.color || '#cccccc',
     }"
   >
-    <div class="event_time">{{ time }}</div>
-    <div class="event_name">{{ data.name }}</div>
-    <div class="duration">{{ formattedDuration }}</div>
+    <div style="display: flex; flex-direction: column">
+      <div class="event_name">{{ data.name }}</div>
+      <div class="event_time">{{ time }}</div>
+    </div>
+    <!--    <div class="duration">{{ formattedDuration }}</div>-->
   </div>
 </template>
 
@@ -23,18 +25,12 @@ const props = defineProps({
 });
 
 const time = computed(() => {
-  const start = new Date(props.data.startDate);
-  const end = new Date(props.data.startDate);
-  // Получаем часы и минуты из времени события
-  const hours = start.getHours();
-  const minutes = end.getMinutes();
+  const startDate = new Date(props.data.startDate);
+  const endDate = new Date(props.data.endDate);
 
-  // // Добавляем ведущий ноль, если часы или минуты меньше 10
-  const formattedHours = hours < 10 ? "0" + hours : hours;
-  const formattedMinutes = minutes < 10 ? "0" + minutes : minutes;
-  //
-  // // Возвращаем строку в формате "hh:mm"
-  return `${formattedHours}:${formattedMinutes}`;
+  return `${startDate.toTimeString().slice(0, 5)} – ${endDate
+    .toTimeString()
+    .slice(0, 5)}`;
 });
 
 const dur = computed(() => {
@@ -79,10 +75,21 @@ const eventHeight = (dur: number) => {
   position: absolute;
   right: 5px;
   color: white;
+  font-size: 14px;
 }
 
 .event_name,
 .event_time {
   color: white;
+  text-align: left;
+  padding-top: 4px;
+}
+
+.event_name {
+  font-weight: bold;
+}
+
+.event_time {
+  font-size: 14px;
 }
 </style>

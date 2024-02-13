@@ -45,7 +45,7 @@ const listTitle = computed(() => route.params.type);
 const remindersParams = computed(() => {
   switch (route.params.type) {
     case "Все":
-      return "?filters[done][$eq]=false";
+      return "?filters[done][$eq]=false&populate=*";
   }
   return "";
 });
@@ -71,7 +71,6 @@ const getReminds = async () => {
   try {
     const data = await api.getRemindsList(remindersParams.value);
     remindsList.value = data.reminds;
-    console.log(remindsList.value);
   } catch (err) {
     error.value = "Error fetching data";
   } finally {

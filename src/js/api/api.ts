@@ -32,7 +32,7 @@ export const api = {
 
   async getEventById(id: string): Promise<any> {
     try {
-      const response = await instance.get(`/events/${id}`);
+      const response = await instance.get(`/events/${id}?populate=*`);
 
       return response.data.data.attributes;
     } catch (error) {
@@ -50,7 +50,7 @@ export const api = {
 
   async getEventList(): Promise<any> {
     try {
-      const response = await instance.get("/events");
+      const response = await instance.get("/events?populate=*");
 
       return response.data.data.map((item: any) => ({
         id: item.id,
@@ -127,6 +127,18 @@ export const api = {
         id: item.id,
         ...item.attributes,
       }));
+    } catch (error) {
+      throw new Error(error as any);
+    }
+  },
+
+  async createTag(params: any): Promise<any> {
+    try {
+      const response = await instance.post("/tags", params);
+      return {
+        id: response.data.data.id,
+        name: response.data.data.attributes.name,
+      };
     } catch (error) {
       throw new Error(error as any);
     }
