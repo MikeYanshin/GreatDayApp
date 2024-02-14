@@ -1,7 +1,12 @@
 <template>
   <div>
     <app-header v-if="onHomePage || onRemindersPage || onSettingsPage" />
-    <router-view />
+    <router-view v-slot="{ Component, route }">
+      <!-- Use a custom transition or fallback to `fade` -->
+      <transition :name="route.meta.transition || 'fade'">
+        <component :is="Component" />
+      </transition>
+    </router-view>
     <el-button
       v-if="onHomePage"
       @click="addTaskListVisible = !addTaskListVisible"
@@ -91,16 +96,6 @@ nav a.router-link-exact-active {
 
 body {
   margin: 0;
-}
-
-.v-enter-active,
-.v-leave-active {
-  transition: opacity 0.5s ease;
-}
-
-.v-enter-from,
-.v-leave-to {
-  opacity: 0;
 }
 
 .add-task-button {

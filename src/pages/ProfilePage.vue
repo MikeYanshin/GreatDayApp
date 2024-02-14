@@ -16,7 +16,13 @@
         <h2>{{ profileData.firstName }} {{ profileData.lastName }}</h2>
         <h3>{{ profileData.email }}</h3>
         <div class="actions">
-          <el-button class="action-logout" type="danger">Выйти</el-button>
+          <el-button
+            class="action-logout"
+            type="danger"
+            @click="router.push('/auth')"
+          >
+            Выйти
+          </el-button>
         </div>
       </div>
       <div v-else>
@@ -59,6 +65,7 @@ const router = useRouter();
 </script>
 <style scoped>
 .profile {
+  text-align: center;
   position: relative;
   top: 53px;
   padding: 16px 8px;

@@ -6,17 +6,19 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
     name: "home",
+    meta: { transition: "slide-left" },
     component: CalendarPage,
   },
   {
     path: "/auth",
     name: "auth",
+    meta: { transition: "slide-left" },
     component: LoginPage,
   },
   {
     path: "/create-task/:type",
     name: "create-task",
-    meta: { transition: "slide-left" }, // TODO Добавить анимацию роута
+    meta: { transition: "slide-left" },
     component: () => import("@/pages/CreateTaskPage.vue"),
   },
   {
@@ -28,6 +30,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/reminders",
     name: "reminders",
+    meta: { transition: "slide-left" },
     component: () => import("@/pages/RemindersPage.vue"),
   },
   {
@@ -39,11 +42,13 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/settings",
     name: "settings",
+    meta: { transition: "slide-left" },
     component: () => import("@/pages/SettingsPage.vue"),
   },
   {
     path: "/profile",
     name: "profile",
+    meta: { transition: "slide-left" },
     component: () => import("@/pages/ProfilePage.vue"),
   },
 ];

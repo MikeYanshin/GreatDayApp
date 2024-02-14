@@ -35,19 +35,18 @@
     >
       {{ isLogined ? "Войти" : "Зарегистрироваться" }}
     </el-button>
-    <div class="remember">
-      <input type="checkbox" id="remember" name="remember" />
-      <label for="remember">Запомнить меня</label>
-    </div>
+    <!--    <div class="remember">-->
+    <!--      <input type="checkbox" id="remember" name="remember" />-->
+    <!--      <label for="remember">Запомнить меня</label>-->
+    <!--    </div>-->
   </form>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { ref } from "vue";
+import { showNotify } from "@/js/helpers/useNotify";
 import { useRouter } from "vue-router";
 import { isLogined } from "@/js/helpers/isLogined";
-import { useNotifyStore } from "@/store";
-import { ElMessage } from "element-plus";
 
 import { Avatar, Key } from "@element-plus/icons-vue";
 
@@ -57,7 +56,6 @@ const emailError = ref("");
 const passwordInputType = ref("password");
 const emailRegex = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
 
-const { showNotify } = useNotifyStore();
 const router = useRouter();
 
 const submitForm = () => {
@@ -66,9 +64,10 @@ const submitForm = () => {
   }
 
   if (!email.value || !password.value) {
-    ElMessage({
-      message: "Неправильный адрес электронной почты или пароль.",
+    showNotify({
       type: "error",
+      duration: 1500,
+      message: `Введите адрес электронной почты или пароль`,
     });
 
     return;
@@ -83,9 +82,10 @@ const submitForm = () => {
     // Perform registration logic here
     // Save user data to local storage or backend
     localStorage.setItem("user", JSON.stringify(user));
-    ElMessage({
-      message: "Вы зарегистрированы!",
+    showNotify({
       type: "success",
+      duration: 1500,
+      message: `Вы зарегистрированы!`,
     });
     router.push("/");
 
@@ -104,8 +104,9 @@ const submitForm = () => {
   }
 
   showNotify({
-    header: "Неправильный адрес электронной почты или пароль",
-    type: "danger",
+    type: "error",
+    duration: 1500,
+    message: `Неправильный адрес электронной почты или пароль`,
   });
 };
 </script>
